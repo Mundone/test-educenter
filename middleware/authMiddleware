@@ -1,0 +1,19 @@
+// middleware/authMiddleware.js
+
+const jwt = require('jsonwebtoken'); // You'll need to install the 'jsonwebtoken' package
+
+exports.authenticateUser = (req, res, next) => {
+    try {
+        // Assuming you're using Bearer tokens, extract the token from the Authorization header
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify against the secret used to sign the tokens
+
+        req.user = decoded; // If verified, the decoded data is attached to the request object
+
+        next(); // Proceed to the next middleware/route handler
+    } catch (error) {
+        res.status(401).send('Unauthorized access');
+    }
+};
+
+// You can add more sophisticated checks, refresh token logic, etc.
